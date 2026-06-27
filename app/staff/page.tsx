@@ -43,6 +43,19 @@ export default async function StaffDashboard() {
         <StatCard label="Today" value={today} accent="seal" />
       </div>
 
+      <div className="mt-6 flex flex-wrap items-center gap-3 rounded-[calc(var(--radius-base)+2px)] border border-line bg-surface px-5 py-4">
+        <div className="mr-auto">
+          <p className="font-serif text-base font-semibold text-ink">Export reports</p>
+          <p className="text-sm text-ink-soft">Download all requests for your records.</p>
+        </div>
+        <a href="/api/reports/requests?format=csv">
+          <Button variant="outline" size="sm">Export CSV</Button>
+        </a>
+        <a href="/api/reports/requests?format=pdf">
+          <Button variant="outline" size="sm">Export PDF</Button>
+        </a>
+      </div>
+
       {count('pending') > 0 && (
         <div className="mt-6 rounded-[calc(var(--radius-base)+2px)] border border-[var(--st-pending)]/30 bg-[var(--st-pending)]/10 px-5 py-4">
           <p className="text-sm text-[var(--st-pending)]">
