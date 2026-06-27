@@ -6,6 +6,7 @@ import { Shell } from '@/components/layout/Shell'
 const NAV = [
   { href: '/staff', label: 'Dashboard' },
   { href: '/staff/requests', label: 'Requests' },
+  { href: '/staff/template', label: 'Letter template' },
 ]
 
 const ROLE_LABEL: Record<string, string> = {

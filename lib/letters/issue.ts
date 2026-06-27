@@ -4,21 +4,9 @@ import { formatSerial } from '@/lib/domain/serial'
 import { PROGRAMS, type ProgramCode } from '@/lib/domain/registration'
 import { buildLetterPdf } from './pdf'
 import { verifyUrl } from './qr'
+import { renderTemplateBody } from './template'
 
 const STORAGE_BUCKET = 'letters'
-
-function stripHtml(html: string): string[] {
-  return html
-    .replace(/<\/(p|h2|div)>/gi, '\n')
-    .replace(/<[^>]+>/g, '')
-    .split('\n')
-    .map((s) => s.replace(/\s+/g, ' ').trim())
-    .filter(Boolean)
-}
-
-function fill(text: string, vars: Record<string, string>): string {
-  return text.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, k) => vars[k] ?? '')
-}
 
 function newToken(): string {
   return crypto.randomUUID().replace(/-/g, '')
@@ -86,9 +74,7 @@ export async function issueLetter(requestId: string, issuedBy: string): Promise<
     serial,
   }
 
-  const bodyParagraphs = tpl?.body_html
-    ? stripHtml(tpl.body_html).map((p) => fill(p, vars)).filter((p) => !/^TO WHOM/i.test(p))
-    : undefined
+  const bodyParagraphs = tpl?.body_html ? renderTemplateBody(tpl.body_html, vars) : undefined
 
   const pdfBytes = await buildLetterPdf({
     serial,
