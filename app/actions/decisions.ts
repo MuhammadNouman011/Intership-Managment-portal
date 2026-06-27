@@ -11,6 +11,8 @@ import {
   type DecisionAction,
 } from '@/lib/domain/decisions'
 import { issueLetter } from '@/lib/letters/issue'
+import { sendEmail } from '@/lib/email/send'
+import { decisionEmail } from '@/lib/email/templates'
 
 export interface DecisionResult {
   ok?: boolean
@@ -55,13 +57,18 @@ export async function decide(
     .from('requests')
     .update(update)
     .eq('id', requestId)
-    .select('student_id')
+    .select('student_id, profiles(full_name, email), companies(name)')
     .single()
   if (error || !updated) return { error: error?.message ?? 'Could not update request.' }
 
+  const student = Array.isArray(updated.profiles) ? updated.profiles[0] : updated.profiles
+  const company = Array.isArray(updated.companies) ? updated.companies[0] : updated.companies
+
+  let issuedSerial: string | undefined
   if (action === 'approve') {
     try {
-      await issueLetter(requestId, user.id)
+      const issued = await issueLetter(requestId, user.id)
+      issuedSerial = issued.serial_number
     } catch (e) {
       return { error: `Approved, but letter generation failed: ${(e as Error).message}` }
     }
@@ -82,6 +89,18 @@ export async function decide(
     entity_id: requestId,
     details: { reason: trimmedReason || null },
   })
+
+  // Best-effort email (no-op if Brevo isn't configured).
+  if (student?.email) {
+    const email = decisionEmail(action, {
+      studentName: student.full_name ?? undefined,
+      company: company?.name ?? undefined,
+      reason: trimmedReason || undefined,
+      serial: issuedSerial,
+      link: `/requests/${requestId}`,
+    })
+    await sendEmail(student.email, email)
+  }
 
   revalidatePath('/staff/requests')
   revalidatePath(`/staff/requests/${requestId}`)
