@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Seal } from '@/components/ui/Seal'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { NavLinks, type NavItem } from './NavLinks'
+import { NotificationBell } from './NotificationBell'
 import { signOut } from '@/app/actions/auth'
 
 export function Shell({
@@ -46,6 +47,7 @@ export function Shell({
             Internship Reference Office
           </span>
           <div className="flex items-center gap-2">
+            <NotificationBell />
             <ThemeToggle />
             <form action={signOut}>
               <button

@@ -4,6 +4,7 @@ import { useActionState, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
+import { CompanyAutocomplete } from './CompanyAutocomplete'
 import type { RequestActionResult } from '@/app/actions/requests'
 
 type FormAction = (prev: RequestActionResult, fd: FormData) => Promise<RequestActionResult>
@@ -58,7 +59,7 @@ export function RequestForm({
       <Card>
         <CardHeader eyebrow="Where you're applying" title="Company information" />
         <CardBody className="grid gap-4 sm:grid-cols-2">
-          <Input label="Company name" name="company_name" defaultValue={initial.company_name} error={e?.company_name} required />
+          <CompanyAutocomplete defaultValue={initial.company_name} error={e?.company_name} />
           <Input label="City" name="city" defaultValue={initial.city} error={e?.city} required />
           <Input label="Address" name="company_address" defaultValue={initial.company_address} error={e?.company_address} required className="sm:col-span-2" />
           <Input label="Country" name="country" defaultValue={initial.country ?? 'Pakistan'} error={e?.country} required />
