@@ -7,9 +7,9 @@ import { createServerClient } from '@supabase/ssr'
  * authenticated users are redirected away from the auth pages.
  */
 const PROTECTED_PREFIXES = ['/dashboard', '/profile', '/requests', '/letters', '/admin', '/staff']
-const AUTH_PAGES = ['/login', '/signup', '/verify', '/forgot']
+const AUTH_PAGES = ['/login', '/signup', '/verify-otp', '/forgot']
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request })
 
   const supabase = createServerClient(

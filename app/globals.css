@@ -1,26 +1,163 @@
 @import "tailwindcss";
 
+/* ===========================================================================
+   IRMS — "The Registry" design system
+   Official records office: deep COMSATS teal, cool paper, ink text, and a
+   wax-seal gold reserved for certified moments. IBM Plex superfamily.
+   =========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f4f7f6;
+  --surface: #ffffff;
+  --surface-2: #eef3f1;
+  --ink: #13201e;
+  --ink-soft: #566b66;
+  --ink-faint: #8499941a;
+  --line: #dde6e3;
+  --line-strong: #c4d2ce;
+
+  --primary: #0c5c56;
+  --primary-hover: #094a45;
+  --primary-tint: #e1efec;
+  --on-primary: #f3faf8;
+
+  --seal: #a9762a;
+  --seal-tint: #f4ead6;
+
+  /* status palette */
+  --st-draft: #6b7a8f;
+  --st-pending: #b07d12;
+  --st-hold: #8a6d1f;
+  --st-returned: #2f6aa3;
+  --st-rejected: #a83a48;
+  --st-approved: #157a5b;
+  --st-cancelled: #8a8f8d;
+
+  --radius: 0.625rem;
+  --shadow-sm: 0 1px 2px rgba(16, 33, 30, 0.06);
+  --shadow-md: 0 6px 20px -8px rgba(16, 33, 30, 0.18);
+  --shadow-lg: 0 24px 60px -20px rgba(16, 33, 30, 0.28);
+}
+
+[data-theme="dark"] {
+  --paper: #0c1413;
+  --surface: #131e1c;
+  --surface-2: #17241f;
+  --ink: #e9f1ee;
+  --ink-soft: #9fb2ac;
+  --ink-faint: #ffffff0f;
+  --line: #25322e;
+  --line-strong: #32433e;
+
+  --primary: #3fb6a6;
+  --primary-hover: #56c6b6;
+  --primary-tint: #123330;
+  --on-primary: #06201c;
+
+  --seal: #e0a640;
+  --seal-tint: #2a2113;
+
+  --st-draft: #93a3b8;
+  --st-pending: #e0aa3a;
+  --st-hold: #cdab53;
+  --st-returned: #6ba2d6;
+  --st-rejected: #e0707d;
+  --st-approved: #4fc596;
+  --st-cancelled: #9aa39f;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-tint: var(--primary-tint);
+  --color-on-primary: var(--on-primary);
+  --color-seal: var(--seal);
+  --color-seal-tint: var(--seal-tint);
+
+  --color-st-draft: var(--st-draft);
+  --color-st-pending: var(--st-pending);
+  --color-st-hold: var(--st-hold);
+  --color-st-returned: var(--st-returned);
+  --color-st-rejected: var(--st-rejected);
+  --color-st-approved: var(--st-approved);
+  --color-st-cancelled: var(--st-cancelled);
+
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-plex-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --radius-base: var(--radius);
+  --shadow-card: var(--shadow-md);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--line);
+}
+
+html {
+  background: var(--paper);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+/* The signature motif: serial numbers / reference codes set like a stamp. */
+.serial {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Small uppercase label used for eyebrows and field captions. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Security-paper guilloché: a faint engraved texture for certified surfaces. */
+.guilloche {
+  background-image:
+    repeating-radial-gradient(
+      circle at 0 0,
+      transparent 0,
+      transparent 11px,
+      color-mix(in srgb, var(--primary) 5%, transparent) 12px
+    ),
+    repeating-radial-gradient(
+      circle at 100% 100%,
+      transparent 0,
+      transparent 11px,
+      color-mix(in srgb, var(--seal) 5%, transparent) 12px
+    );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

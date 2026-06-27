@@ -1,65 +1,119 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { Button } from '@/components/ui/Button'
+import { Seal } from '@/components/ui/Seal'
+import { StatusPill } from '@/components/ui/StatusPill'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="flex min-h-full flex-col">
+      {/* Top bar */}
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5">
+        <div className="flex items-center gap-2.5">
+          <Seal size={36} state="blank" />
+          <div className="leading-tight">
+            <p className="font-serif text-base font-semibold text-ink">IRMS</p>
+            <p className="text-[11px] text-ink-soft">COMSATS Sahiwal · CS</p>
+          </div>
+        </div>
+        <nav className="flex items-center gap-2">
+          <Link href="/verify">
+            <Button variant="ghost" size="sm">
+              Verify a letter
+            </Button>
+          </Link>
+          <Link href="/login">
+            <Button variant="outline" size="sm">
+              Sign in
+            </Button>
+          </Link>
+          <ThemeToggle />
+        </nav>
+      </header>
+
+      {/* Hero — the certified letter is the thesis */}
+      <section className="mx-auto grid w-full max-w-6xl flex-1 items-center gap-12 px-6 py-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p className="eyebrow mb-4">Internship Reference Office</p>
+          <h1 className="font-serif text-4xl font-semibold leading-[1.08] text-ink sm:text-5xl">
+            Official internship reference letters,
+            <span className="text-primary"> issued and verified</span> in one place.
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-ink-soft">
+            Request a department-signed reference letter for your summer internship.
+            Each letter carries a unique reference number and a scannable seal, so any
+            employer can confirm it is genuine in seconds.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link href="/signup">
+              <Button size="lg">Request a letter</Button>
+            </Link>
+            <Link href="/verify">
+              <Button variant="outline" size="lg">
+                Verify a reference number
+              </Button>
+            </Link>
+          </div>
+          <p className="mt-5 text-xs text-ink-soft">
+            Sign up with your{' '}
+            <span className="serial text-ink">@students.cuisahiwal.edu.pk</span> email.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* A specimen letter, sealed */}
+        <div className="relative">
+          <div className="guilloche absolute -inset-3 rounded-2xl opacity-70" aria-hidden />
+          <div className="relative overflow-hidden rounded-2xl border border-line bg-surface shadow-[var(--shadow-lg)]">
+            <div className="flex items-center justify-between border-b border-line px-6 py-4">
+              <div>
+                <p className="eyebrow">Reference</p>
+                <p className="serial text-sm text-ink">IRMS-2026-000128</p>
+              </div>
+              <StatusPill status="approved" />
+            </div>
+            <div className="space-y-3 px-6 py-6">
+              <p className="font-serif text-lg font-semibold text-ink">To Whom It May Concern</p>
+              <p className="text-sm leading-relaxed text-ink-soft">
+                This is to certify that <span className="text-ink">Muhammad Ali</span>,
+                Registration No. <span className="serial text-ink">CIIT/FA24-BSE-011/SWL</span>,
+                is a bona fide student of BS Software Engineering, recommended for an
+                internship at <span className="text-ink">Systems Limited</span>.
+              </p>
+              <div className="h-px bg-line" />
+              <div className="flex items-end justify-between pt-1">
+                <div className="text-xs text-ink-soft">
+                  <p className="text-ink">Internship Coordinator</p>
+                  <p>Department of Computer Science</p>
+                </div>
+                <Seal serial="" size={72} state="valid" />
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
-  );
+      </section>
+
+      {/* How it works — a real sequence, so numbered steps carry meaning */}
+      <section className="mx-auto w-full max-w-6xl px-6 pb-20">
+        <div className="grid gap-6 sm:grid-cols-3">
+          {[
+            { n: '01', t: 'Request', d: 'Fill in the company and internship details. Your registration number is read from your university email.' },
+            { n: '02', t: 'Approve', d: 'The coordinator reviews and approves. A serial number and sealed PDF are generated automatically.' },
+            { n: '03', t: 'Verify', d: 'Download, print, and get it stamped. Employers verify it by scanning the seal or entering the reference number.' },
+          ].map((s) => (
+            <div key={s.n} className="rounded-[calc(var(--radius-base)+2px)] border border-line bg-surface p-5">
+              <p className="serial text-seal">{s.n}</p>
+              <p className="mt-3 font-serif text-lg font-semibold text-ink">{s.t}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{s.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className="border-t border-line">
+        <div className="mx-auto w-full max-w-6xl px-6 py-6 text-xs text-ink-soft">
+          COMSATS University Islamabad, Sahiwal Campus — Department of Computer Science
+        </div>
+      </footer>
+    </main>
+  )
 }
