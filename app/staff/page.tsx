@@ -5,6 +5,10 @@ import { getCurrentUser } from '@/lib/auth/session'
 import { isStaff } from '@/lib/auth/guard'
 import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
+import { Card, CardBody, CardHeader } from '@/components/ui/Card'
+import { BarChart } from '@/components/charts/BarChart'
+import { RankBars } from '@/components/charts/RankBars'
+import { countByStatus, byMonth, bySemester, topCompanies, type AggRow } from '@/lib/reports/aggregate'
 
 function isToday(iso: string) {
   const d = new Date(iso)
@@ -18,10 +22,23 @@ export default async function StaffDashboard() {
   if (!isStaff(user.role)) redirect('/dashboard')
 
   const supabase = await getServerClient()
-  const { data } = await supabase.from('requests').select('status, created_at').limit(2000)
-  const all = data ?? []
+  const { data } = await supabase
+    .from('requests')
+    .select('status, created_at, profiles(semester), companies(name)')
+    .limit(5000)
+
+  const all: AggRow[] = (data ?? []).map((r) => {
+    const p = Array.isArray(r.profiles) ? r.profiles[0] : r.profiles
+    const c = Array.isArray(r.companies) ? r.companies[0] : r.companies
+    return {
+      status: r.status as string,
+      created_at: r.created_at as string,
+      semester: p?.semester ?? null,
+      company: c?.name ?? null,
+    }
+  })
   const count = (s: string) => all.filter((r) => r.status === s).length
-  const today = all.filter((r) => isToday(r.created_at as string)).length
+  const today = all.filter((r) => isToday(r.created_at)).length
 
   return (
     <div className="mx-auto w-full max-w-5xl">
@@ -54,6 +71,33 @@ export default async function StaffDashboard() {
         <a href="/api/reports/requests?format=pdf">
           <Button variant="outline" size="sm">Export PDF</Button>
         </a>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader eyebrow="Trend" title="Requests per month" />
+          <CardBody>
+            <BarChart data={byMonth(all, 6)} />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader eyebrow="Breakdown" title="By status" />
+          <CardBody>
+            <RankBars data={countByStatus(all)} useStatusColors />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader eyebrow="Cohorts" title="By semester" />
+          <CardBody>
+            <RankBars data={bySemester(all)} />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader eyebrow="Employers" title="Top companies" />
+          <CardBody>
+            <RankBars data={topCompanies(all, 5)} />
+          </CardBody>
+        </Card>
       </div>
 
       {count('pending') > 0 && (

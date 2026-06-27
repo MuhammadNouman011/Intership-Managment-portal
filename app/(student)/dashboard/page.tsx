@@ -4,7 +4,9 @@ import { getServerClient } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/auth/session'
 import { Button } from '@/components/ui/Button'
 import { StatCard } from '@/components/ui/StatCard'
-import { Card, CardBody } from '@/components/ui/Card'
+import { Card, CardBody, CardHeader } from '@/components/ui/Card'
+import { RankBars } from '@/components/charts/RankBars'
+import { countByStatus } from '@/lib/reports/aggregate'
 
 export default async function StudentDashboard() {
   const user = await getCurrentUser()
@@ -57,6 +59,15 @@ export default async function StudentDashboard() {
         <StatCard label="Pending" value={count('pending')} accent="pending" />
         <StatCard label="Rejected" value={count('rejected')} accent="rejected" />
       </div>
+
+      {all.length > 0 && (
+        <Card className="mt-6">
+          <CardHeader eyebrow="Breakdown" title="Your requests by status" />
+          <CardBody>
+            <RankBars data={countByStatus(all.map((r) => ({ status: r.status, created_at: '' })))} useStatusColors />
+          </CardBody>
+        </Card>
+      )}
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <Link href="/requests" className="group">
