@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#0c5c56"/>
+  <circle cx="256" cy="256" r="168" fill="none" stroke="#a9762a" stroke-width="10" opacity="0.9"/>
+  <circle cx="256" cy="256" r="138" fill="none" stroke="#f3faf8" stroke-width="3" opacity="0.45"/>
+  <text x="256" y="292" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="120" font-weight="600" fill="#f3faf8">IRMS</text>
+</svg>
