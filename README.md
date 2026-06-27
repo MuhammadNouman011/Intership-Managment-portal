@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IRMS — Internship Reference Letter Management System
 
-## Getting Started
+Official internship reference letters for **COMSATS University Islamabad, Sahiwal Campus —
+Department of Computer Science**. Students request a letter, a coordinator approves it, and a
+sealed PDF with an auto serial number and a public QR-verification page is generated for download.
 
-First, run the development server:
+Built to run entirely on **free tiers** (Supabase + Vercel + Brevo).
+
+## Stack
+
+- **Next.js** (App Router, TypeScript) + **Tailwind CSS** — UI + API, installable PWA
+- **Supabase** — Postgres, Auth (email + OTP), Storage, Row-Level Security
+- **pdf-lib** + **qrcode** — sealed A4 letter generation
+- **Brevo** — SMTP for OTP / notification emails
+- **Vitest** — unit tests for all domain logic
+
+## Roles
+
+`student` · `coordinator` · `hod` · `admin` — flexible approval (coordinator is primary; HOD/admin
+can override). See `docs/superpowers/specs/` for the full design.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm test         # unit tests
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copy `.env.example` → `.env.local` and fill the Supabase keys.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Set up & deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Full step-by-step (accounts, SQL, storage, SMTP, first admin, Vercel): **[`docs/SETUP.md`](docs/SETUP.md)**.
 
-## Learn More
+## Project docs
 
-To learn more about Next.js, take a look at the following resources:
+- Design spec — `docs/superpowers/specs/2026-06-27-internship-reference-letter-system-design.md`
+- Implementation plan (Phase 1) — `docs/superpowers/plans/2026-06-27-phase1-core.md`
+- Database — `supabase/` (`schema.sql`, `functions.sql`, `policies.sql`, `seed.sql`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Status
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Phase 1 (core) complete:** auth + OTP, profile, request flow, coordinator decisions, automatic
+letter issuance (serial + QR + PDF), download + history, public verification, role dashboards, PWA.
+Phase 2/3 (dashboard charts, notifications center, editable-template UI, reports, multi-language,
+HOD/admin panels, announcements) are designed and queued.
