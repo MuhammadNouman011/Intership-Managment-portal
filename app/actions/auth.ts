@@ -43,7 +43,12 @@ export async function verifySignupOtp(_prev: ActionResult, formData: FormData): 
   if (!/^\d{6}$/.test(token)) return { error: 'Enter the 6-digit code from your email.' }
 
   const supabase = await getServerClient()
-  const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
+  // signUp() with email confirmation issues a 'signup' OTP; fall back to 'email'
+  // (used by signInWithOtp) so either delivery path verifies correctly.
+  let { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'signup' })
+  if (error) {
+    ;({ data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' }))
+  }
   if (error) return { error: error.message }
 
   const user = data.user
