@@ -3,8 +3,14 @@ import { Button } from '@/components/ui/Button'
 import { Seal } from '@/components/ui/Seal'
 import { StatusPill } from '@/components/ui/StatusPill'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { LanguageToggle } from '@/components/i18n/LanguageToggle'
+import { getLocale } from '@/lib/i18n/server'
+import { translate } from '@/lib/i18n/config'
 
-export default function Home() {
+export default async function Home() {
+  const locale = await getLocale()
+  const t = (k: string) => translate(locale, k)
+
   return (
     <main className="flex min-h-full flex-col">
       {/* Top bar */}
@@ -19,14 +25,15 @@ export default function Home() {
         <nav className="flex items-center gap-2">
           <Link href="/verify">
             <Button variant="ghost" size="sm">
-              Verify a letter
+              {t('common.verifyLetter')}
             </Button>
           </Link>
           <Link href="/login">
             <Button variant="outline" size="sm">
-              Sign in
+              {t('common.signIn')}
             </Button>
           </Link>
+          <LanguageToggle current={locale} />
           <ThemeToggle />
         </nav>
       </header>
@@ -34,29 +41,27 @@ export default function Home() {
       {/* Hero — the certified letter is the thesis */}
       <section className="mx-auto grid w-full max-w-6xl flex-1 items-center gap-12 px-6 py-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
-          <p className="eyebrow mb-4">Internship Reference Office</p>
+          <p className="eyebrow mb-4">{t('landing.eyebrow')}</p>
           <h1 className="font-serif text-4xl font-semibold leading-[1.08] text-ink sm:text-5xl">
-            Official internship reference letters,
-            <span className="text-primary"> issued and verified</span> in one place.
+            {t('landing.title1')} <span className="text-primary">{t('landing.titleAccent')}</span>{' '}
+            {t('landing.title2')}
           </h1>
           <p className="mt-5 max-w-lg text-base leading-relaxed text-ink-soft">
-            Request a department-signed reference letter for your summer internship.
-            Each letter carries a unique reference number and a scannable seal, so any
-            employer can confirm it is genuine in seconds.
+            {t('landing.subtitle')}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link href="/signup">
-              <Button size="lg">Request a letter</Button>
+              <Button size="lg">{t('landing.ctaRequest')}</Button>
             </Link>
             <Link href="/verify">
               <Button variant="outline" size="lg">
-                Verify a reference number
+                {t('landing.ctaVerify')}
               </Button>
             </Link>
           </div>
           <p className="mt-5 text-xs text-ink-soft">
-            Sign up with your{' '}
-            <span className="serial text-ink">@students.cuisahiwal.edu.pk</span> email.
+            {t('landing.signupHint')}{' '}
+            <span className="serial text-ink">@students.cuisahiwal.edu.pk</span> {t('landing.email')}
           </p>
         </div>
 
@@ -96,9 +101,9 @@ export default function Home() {
       <section className="mx-auto w-full max-w-6xl px-6 pb-20">
         <div className="grid gap-6 sm:grid-cols-3">
           {[
-            { n: '01', t: 'Request', d: 'Fill in the company and internship details. Your registration number is read from your university email.' },
-            { n: '02', t: 'Approve', d: 'The coordinator reviews and approves. A serial number and sealed PDF are generated automatically.' },
-            { n: '03', t: 'Verify', d: 'Download, print, and get it stamped. Employers verify it by scanning the seal or entering the reference number.' },
+            { n: '01', t: t('landing.step1Title'), d: t('landing.step1Desc') },
+            { n: '02', t: t('landing.step2Title'), d: t('landing.step2Desc') },
+            { n: '03', t: t('landing.step3Title'), d: t('landing.step3Desc') },
           ].map((s) => (
             <div key={s.n} className="rounded-[calc(var(--radius-base)+2px)] border border-line bg-surface p-5">
               <p className="serial text-seal">{s.n}</p>
@@ -111,7 +116,7 @@ export default function Home() {
 
       <footer className="border-t border-line">
         <div className="mx-auto w-full max-w-6xl px-6 py-6 text-xs text-ink-soft">
-          COMSATS University Islamabad, Sahiwal Campus — Department of Computer Science
+          {t('landing.footer')}
         </div>
       </footer>
     </main>

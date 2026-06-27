@@ -1,8 +1,11 @@
 import Link from 'next/link'
 import { Seal } from '@/components/ui/Seal'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { LanguageToggle } from '@/components/i18n/LanguageToggle'
+import { getLocale } from '@/lib/i18n/server'
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale()
   return (
     <div className="grid min-h-full lg:grid-cols-[1.1fr_1fr]">
       {/* Brand panel */}
@@ -37,7 +40,10 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <span className="font-serif font-semibold text-ink">IRMS</span>
           </Link>
           <span className="hidden lg:block" />
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <LanguageToggle current={locale} />
+            <ThemeToggle />
+          </div>
         </div>
         <div className="flex flex-1 items-center justify-center px-6 pb-12">
           <div className="w-full max-w-sm">{children}</div>

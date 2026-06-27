@@ -3,19 +3,24 @@ import { Seal } from '@/components/ui/Seal'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { NavLinks, type NavItem } from './NavLinks'
 import { NotificationBell } from './NotificationBell'
+import { LanguageToggle } from '@/components/i18n/LanguageToggle'
+import { translate, type Locale } from '@/lib/i18n/config'
 import { signOut } from '@/app/actions/auth'
 
 export function Shell({
   items,
   userName,
   roleLabel,
+  locale,
   children,
 }: {
   items: NavItem[]
   userName: string
   roleLabel: string
+  locale: Locale
   children: React.ReactNode
 }) {
+  const t = (k: string) => translate(locale, k)
   return (
     <div className="grid min-h-full lg:grid-cols-[240px_1fr]">
       {/* Sidebar */}
@@ -43,18 +48,17 @@ export function Shell({
           <div className="flex items-center gap-1 overflow-x-auto lg:hidden">
             <NavLinks items={items} />
           </div>
-          <span className="hidden lg:block text-sm text-ink-soft">
-            Internship Reference Office
-          </span>
+          <span className="hidden lg:block text-sm text-ink-soft">{t('common.office')}</span>
           <div className="flex items-center gap-2">
             <NotificationBell />
+            <LanguageToggle current={locale} />
             <ThemeToggle />
             <form action={signOut}>
               <button
                 type="submit"
                 className="rounded-[var(--radius-base)] border border-line px-3 py-1.5 text-sm text-ink-soft transition-colors hover:text-ink hover:bg-surface-2"
               >
-                Sign out
+                {t('common.signOut')}
               </button>
             </form>
           </div>
