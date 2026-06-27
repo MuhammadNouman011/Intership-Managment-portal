@@ -70,6 +70,15 @@ chalane ke liye Brevo SMTP laga do:
    - Sender email: apni verified email (Brevo mein sender verify karna parta hai)
 4. Save. Ab OTP/reset emails Brevo se jaayenge.
 
+### 2a. Decision emails (approve/reject) — optional
+App approve/reject par student ko email bhejta hai (Brevo HTTP API se). Iske liye `.env.local`
+(aur Vercel env) mein ye do daalo:
+```
+BREVO_API_KEY=<Brevo SMTP & API → API Keys wala key>
+EMAIL_FROM=<verified sender email>
+```
+Agar ye set na hon to email feature **khud-ba-khud skip** ho jata hai (app phir bhi chalti hai).
+
 ---
 
 ## 3. First staff accounts (coordinator / hod / admin)
